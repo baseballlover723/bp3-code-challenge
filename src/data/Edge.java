@@ -8,4 +8,12 @@ public class Edge {
 		this.from = from;
 		this.to = to;
 	}
+
+	public Node getFrom() {
+		return this.from;
+	}
+
+	public Node getTo() {
+		return this.to;
+	}
 }

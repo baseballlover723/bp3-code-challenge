@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import data.Edge;
+import data.EdgeSerializer;
 import data.Node;
 
 public class Solver {
@@ -39,8 +40,6 @@ public class Solver {
 
 		this.nodes = parseNodes(jsonNodes);
 		this.edges = parseEdges(jsonEdges);
-
-//		System.out.println((new Gson()).toJson(this.nodes));
 	}
 
 	private ArrayList<Node> parseNodes(JsonArray jsonNodes) {
@@ -75,18 +74,27 @@ public class Solver {
 	}
 
 	public void solve() throws IOException {
+		ArrayList<Node> nodesToRemove = new ArrayList<Node>(); // to avoid ConcurrentModificationException
+		for (Node node : this.nodes) {
+			if (node.isServiceTask()) {
+				node.remove(this.nodes, this.edges);
+				nodesToRemove.add(node);
+			}
+		}
+		for (Node node : nodesToRemove) {
+			this.nodes.remove(node);
+		}
 		this.writeOutput();
 	}
 
 	public void writeOutput() throws IOException {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().registerTypeAdapter(Edge.class, new EdgeSerializer()).setPrettyPrinting().create();
 		JsonObject outputJson = new JsonObject();
 		
 		outputJson.add("nodes", gson.toJsonTree(this.nodes));
 		outputJson.add("edges", gson.toJsonTree(this.edges));
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(this.outputPath));
-		System.out.println(gson.toJson(outputJson));
 		writer.write(gson.toJson(outputJson));
 		writer.close();
 	}

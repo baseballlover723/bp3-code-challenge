@@ -10,7 +10,7 @@ public class Main {
 			solver.solve();
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("Could not find input file");
+			System.out.println("Could not find input file or there was an error writing to the output file");
 		}
 	}
 }

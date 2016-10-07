@@ -1,5 +1,7 @@
 package computation;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -8,16 +10,20 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import node.Node;
+import data.Edge;
+import data.Node;
 
 public class Solver {
 	private String outputPath;
 	private String inputPath;
+	private ArrayList<Node> nodes;
+	private ArrayList<Edge> edges;
 
 	public Solver(String inputPath, String outputPath) throws IOException {
 		this.inputPath = inputPath;
@@ -31,10 +37,10 @@ public class Solver {
 		JsonArray jsonNodes = jsonObject.get("nodes").getAsJsonArray();
 		JsonArray jsonEdges = jsonObject.get("edges").getAsJsonArray();
 
-		ArrayList<Node> nodes = parseNodes(jsonNodes);
-		parseEdges(nodes, jsonEdges);
+		this.nodes = parseNodes(jsonNodes);
+		this.edges = parseEdges(jsonEdges);
 
-		System.out.println((new Gson()).toJson(nodes));
+//		System.out.println((new Gson()).toJson(this.nodes));
 	}
 
 	private ArrayList<Node> parseNodes(JsonArray jsonNodes) {
@@ -52,26 +58,37 @@ public class Solver {
 		return nodes;
 	}
 
-	private void parseEdges(ArrayList<Node> nodes, JsonArray jsonEdges) {
+	private ArrayList<Edge> parseEdges(JsonArray jsonEdges) {
+		ArrayList<Edge> edges = new ArrayList<Edge>();
 		for (JsonElement jsonElement : jsonEdges) {
 			JsonObject jsonEdge = jsonElement.getAsJsonObject();
 			int fromIndex = jsonEdge.get("from").getAsInt();
 			int toIndex = jsonEdge.get("to").getAsInt();
 			
-			Node fromNode = nodes.get(fromIndex);
-			Node toNode = nodes.get(toIndex);
+			Node fromNode = this.nodes.get(fromIndex);
+			Node toNode = this.nodes.get(toIndex);
 			
-			fromNode.addConnection(toNode);
+			Edge edge = new Edge(fromNode, toNode);
+			edges.add(edge);
 		}
+		return edges;
 	}
 
-	public void solve() {
-
+	public void solve() throws IOException {
 		this.writeOutput();
 	}
 
-	public void writeOutput() {
-
+	public void writeOutput() throws IOException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonObject outputJson = new JsonObject();
+		
+		outputJson.add("nodes", gson.toJsonTree(this.nodes));
+		outputJson.add("edges", gson.toJsonTree(this.edges));
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(this.outputPath));
+		System.out.println(gson.toJson(outputJson));
+		writer.write(gson.toJson(outputJson));
+		writer.close();
 	}
 
 	public String readFile(String path, Charset encoding) throws IOException {

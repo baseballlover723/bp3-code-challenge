@@ -1,0 +1,159 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "name": "Start",
+      "type": "Start"
+    },
+    {
+      "id": 1,
+      "name": "A",
+      "type": "HumanTask"
+    },
+    {
+      "id": 2,
+      "name": "B",
+      "type": "ServiceTask"
+    },
+    {
+      "id": 3,
+      "name": "G1",
+      "type": "Gateway"
+    },
+    {
+      "id": 4,
+      "name": "D",
+      "type": "HumanTask"
+    },
+    {
+      "id": 5,
+      "name": "C",
+      "type": "HumanTask"
+    },
+    {
+      "id": 6,
+      "name": "G2",
+      "type": "Gateway"
+    },
+    {
+      "id": 7,
+      "name": "E",
+      "type": "ServiceTask"
+    },
+    {
+      "id": 8,
+      "name": "End",
+      "type": "End"
+    }
+  ],
+  "edges": [
+    {
+      "from": {
+        "id": 0,
+        "name": "Start",
+        "type": "Start"
+      },
+      "to": {
+        "id": 1,
+        "name": "A",
+        "type": "HumanTask"
+      }
+    },
+    {
+      "from": {
+        "id": 1,
+        "name": "A",
+        "type": "HumanTask"
+      },
+      "to": {
+        "id": 2,
+        "name": "B",
+        "type": "ServiceTask"
+      }
+    },
+    {
+      "from": {
+        "id": 2,
+        "name": "B",
+        "type": "ServiceTask"
+      },
+      "to": {
+        "id": 3,
+        "name": "G1",
+        "type": "Gateway"
+      }
+    },
+    {
+      "from": {
+        "id": 3,
+        "name": "G1",
+        "type": "Gateway"
+      },
+      "to": {
+        "id": 4,
+        "name": "D",
+        "type": "HumanTask"
+      }
+    },
+    {
+      "from": {
+        "id": 4,
+        "name": "D",
+        "type": "HumanTask"
+      },
+      "to": {
+        "id": 6,
+        "name": "G2",
+        "type": "Gateway"
+      }
+    },
+    {
+      "from": {
+        "id": 3,
+        "name": "G1",
+        "type": "Gateway"
+      },
+      "to": {
+        "id": 5,
+        "name": "C",
+        "type": "HumanTask"
+      }
+    },
+    {
+      "from": {
+        "id": 5,
+        "name": "C",
+        "type": "HumanTask"
+      },
+      "to": {
+        "id": 6,
+        "name": "G2",
+        "type": "Gateway"
+      }
+    },
+    {
+      "from": {
+        "id": 6,
+        "name": "G2",
+        "type": "Gateway"
+      },
+      "to": {
+        "id": 7,
+        "name": "E",
+        "type": "ServiceTask"
+      }
+    },
+    {
+      "from": {
+        "id": 7,
+        "name": "E",
+        "type": "ServiceTask"
+      },
+      "to": {
+        "id": 8,
+        "name": "End",
+        "type": "End"
+      }
+    }
+  ]
+}
